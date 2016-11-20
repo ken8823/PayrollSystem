@@ -24,6 +24,12 @@ def startProgram():
 	"""	
 	company = None
 	
+	#Creates a Company and a few users to make things easier for testing. Will be deleted.
+	company = Company('Goofy Dogs Inc.')
+	company.addEmployee('germanshep@dogmail.com')
+	company.addEmployee('corgi@dogmail.com')
+	#Creates a Company and a few users to make things easier for testing. Will be deleted.
+	
 	print('\nWelcome to the Payroll sytem!' )
 	print('\nHere are some useful commands: \ncreatecompany [name]\ninviteemployee [email address]\nviewemployees\nexit\n' )
 	
@@ -39,7 +45,7 @@ def startProgram():
 			company.addEmployee(userinput[1])
 			print(userinput[1], ' was invited to the company!')
 		elif userinput[0].lower() == 'viewemployees':
-			print()
+			print(company.viewEmployees())
 		elif userinput[0].lower() == 'editemployee':
 			print()
 		elif userinput[0].lower() == 'exit':
@@ -65,7 +71,7 @@ class Company:
 		self.userList.addUser(newUser)
 	
 	def viewEmployees(self):
-		return self.userList
+		return self.userList.stringArray()
 		
 
 class UserList:
@@ -80,15 +86,29 @@ class UserList:
 		self.userList.append(user)
 		
 	def getUsers(self):
-		return userList
+		return self.userList
+	
+	def stringArray(self):
+		userListString = ''
 		
+		for user in self.userList:
+			userListString += ('\n' + user.string())
+			
+		return userListString
+	
 class User:
 	"""
 	User class description
 	"""	
-	def __init__(self, email, name="Unknown"):
+	def __init__(self, email, name="Unknown", position = "N/A", salary="0"):
 		self.email = email
-		self.name = name		
+		self.name = name
+		self.position = position
+		self.salary = salary
+	
+	def string(self):
+		description = self.name + ' | ' + self.email + ' | Position: ' + self.position + ' | Salary: $' + self.salary
+		return description
 	
 if __name__ == "__main__":
 	username = input('Enter Username: ') #temp username is admin
