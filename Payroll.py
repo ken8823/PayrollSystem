@@ -18,14 +18,14 @@ def authentication(username, password):
 	else:
 		sys.exit('Invalid Username or Password')
 
-def startProgram():
+def startProgram(file):
 	"""
 	class description
 	"""	
 	company = None
 	
 	#Creates a Company and a few users to make things easier for testing. Will be deleted.
-	company = Company('Goofy Dogs Inc.')
+	company = Company('Goofy Dogs Inc.', file)
 	company.addEmployee('germanshep@dogmail.com')
 	company.addEmployee('corgi@dogmail.com')
 	#Creates a Company and a few users to make things easier for testing. Will be deleted.
@@ -39,7 +39,7 @@ def startProgram():
 		userinput = userinput.split(' ', 1)
 		
 		if userinput[0].lower() == 'createcompany':
-			company = Company(userinput[1])
+			company = Company(userinput[1], file)
 			print('Company ', company.getName(), ' has been created')
 		elif userinput[0].lower() == 'inviteemployee':
 			company.addEmployee(userinput[1])
@@ -50,7 +50,8 @@ def startProgram():
 			print()
 		elif userinput[0].lower() == 'exit':
 			print('\nGoodbye!')
-			sys.exit()
+			#sys.exit()
+			return
 		else:
 			print('ERROR: Command does not exist')
 		
@@ -59,9 +60,10 @@ class Company:
 	class description
 	"""	
 	
-	def __init__(self, name):
+	def __init__(self, name, file):
 		self.name = name
 		self.userList = UserList()
+		self.file = file
 	
 	def getName(self):
 		return self.name
@@ -69,6 +71,7 @@ class Company:
 	def addEmployee(self, email):
 		newUser = User(email)
 		self.userList.addUser(newUser)
+		self.file.write(newUser.dataString());
 	
 	def viewEmployees(self):
 		return self.userList.stringArray()
@@ -109,10 +112,20 @@ class User:
 	def string(self):
 		description = self.name + ' | ' + self.email + ' | Position: ' + self.position + ' | Salary: $' + self.salary
 		return description
+		
+	def dataString(self):
+		description = self.name + '|' + self.email + '|' + self.position + '|' + self.salary + '\n'
+		return description
 	
 if __name__ == "__main__":
 	username = input('Enter Username: ') #temp username is admin
 	password = input('Enter Password: ') #temp password is password
 	authentication(username, password)
 	
-	startProgram()
+	datafile = open("data.txt", "r+")
+	
+	# fo.write( "Python is a great language.\nYeah its great!!\n");
+	
+	startProgram(datafile)
+	
+	datafile.close()
