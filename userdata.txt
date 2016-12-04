@@ -1,1 +1,3 @@
-ponyboy@staygolden.net|gold|Pony|Boy|10/23/1845|12345678l.com|salsa|Christina|Deville|10/12/1984|0123456789
+admin|password|Adamn|Thai|birthday|bankaccount
+ponyboy@staygolden.net|gold|Pony|Boy|10/23/1845|12345678l
+salsalover@salsa.com|salsa|Christina|Deville|10/12/1984|0123456789

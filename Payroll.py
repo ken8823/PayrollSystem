@@ -30,7 +30,7 @@ def register(file):
 	class description
 	"""
 	
-	datafile = open(file, "r+")
+	datafile = open(file, "a")
 
 	print('Thank you for choosing to register! We just need to ask you a few questions.')
 	
@@ -51,7 +51,7 @@ def register(file):
 	
 	return
 	
-def startProgram(file):
+def startProgram(file, userfile, user):
 	"""
 	class description
 	"""	
@@ -59,7 +59,15 @@ def startProgram(file):
 	
 	company = Company('Goofy Dogs Inc.', file)
 	
-	print('\nWelcome to the Payroll system!' )
+	username = ''
+	
+	for line in userfile:
+			temp = line.split('|', 5)
+			if temp[0] == user:
+				username = temp[2] + ' ' + temp[3]
+				break
+	
+	print('\nWelcome ', username, ' to the Payroll system!' )
 	print('\nHere are some useful commands: \ncreatecompany [name]\ninviteemployee [email address]\nviewemployees\nexit\n' )
 	
 	while True:
@@ -161,12 +169,17 @@ if __name__ == "__main__":
 	elif userinput.lower() == 'login':
 		email = input('Enter Email: ') #temp email is admin
 		password = input('Enter Password: ') #temp password is password
+		
 		authentication(email, password, 'userdata.txt')
+		
+		datafile = open('data.txt', "r+")
+		datafile2 = open('userdata.txt', "r+")
+
+		startProgram(datafile, datafile2, email)
+	
+		datafile.close()
+		datafile2.close()
 	else:
 		sys.exit('Invalid Command')
 			
-	datafile = open("data.txt", "r+")
-		
-	startProgram(datafile)
 	
-	datafile.close()
