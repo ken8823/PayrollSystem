@@ -8,33 +8,62 @@ Payroll System
 
 import sys
 
-def authentication(username, password):
+def authentication(email, password, file):
 	"""
 	class description
 	"""	
-	if username == 'admin':
-		if password != 'password':
-			sys.exit('Invalid Username or Password')
-	else:
-		sys.exit('Invalid Username or Password')
+	
+	datafile = open(file, "r+")
+		
+	for line in datafile:
+			temp = line.split('|', 2)
+			if temp[0] == email:
+				if temp[1] == password:
+					return
+			
+	datafile.close()
+	
+	sys.exit('Invalid Email or Password')
 
+def register(file):
+	"""
+	class description
+	"""
+	
+	datafile = open(file, "r+")
+
+	print('Thank you for choosing to register! We just need to ask you a few questions.')
+	
+	email = input('What is your email address? ')
+	password = input('What would you like your password to be? ')
+	firstname = input('What is your first name? ')
+	lastname = input('What is your last name? ')
+	birthday = input('What is your birthday? DD/MM/YYYY ')
+	bankaccount = input('What is the bank account number you would like to use for transactions? ')
+
+	userentry = email + '|' + password + '|' + firstname + '|' + lastname + '|' + birthday + '|' + bankaccount
+	
+	datafile.write(userentry);
+
+	datafile.close()
+		
+	print('Successfully registered! Feel free to login now.')
+	
+	return
+	
 def startProgram(file):
 	"""
 	class description
 	"""	
 	company = None
 	
-	#Creates a Company and a few users to make things easier for testing. Will be deleted.
 	company = Company('Goofy Dogs Inc.', file)
-	company.addEmployee('germanshep@dogmail.com')
-	company.addEmployee('corgi@dogmail.com')
-	#Creates a Company and a few users to make things easier for testing. Will be deleted.
 	
-	print('\nWelcome to the Payroll sytem!' )
+	print('\nWelcome to the Payroll system!' )
 	print('\nHere are some useful commands: \ncreatecompany [name]\ninviteemployee [email address]\nviewemployees\nexit\n' )
 	
 	while True:
-		userinput = input('\nPlease enter a command:')
+		userinput = input('\nPlease enter a command: ')
 		
 		userinput = userinput.split(' ', 1)
 		
@@ -45,7 +74,9 @@ def startProgram(file):
 			company.addEmployee(userinput[1])
 			print(userinput[1], ' was invited to the company!')
 		elif userinput[0].lower() == 'viewemployees':
-			print(company.viewEmployees())
+			print('\nHere are all the employees:')
+			for i in company.viewEmployees():
+				print(i)
 		elif userinput[0].lower() == 'editemployee':
 			print()
 		elif userinput[0].lower() == 'exit':
@@ -74,7 +105,11 @@ class Company:
 		self.file.write(newUser.dataString());
 	
 	def viewEmployees(self):
-		return self.userList.stringArray()
+		self.file.seek(0)
+		array = []
+		for line in self.file:
+			array.append(line)
+		return array
 		
 
 class UserList:
@@ -118,14 +153,20 @@ class User:
 		return description
 	
 if __name__ == "__main__":
-	username = input('Enter Username: ') #temp username is admin
-	password = input('Enter Password: ') #temp password is password
-	authentication(username, password)
+	userinput = input('Login or Register? ')
 	
+	if userinput.lower() == 'register':
+		register('userdata.txt')
+		sys.exit()
+	elif userinput.lower() == 'login':
+		email = input('Enter Email: ') #temp email is admin
+		password = input('Enter Password: ') #temp password is password
+		authentication(email, password, 'userdata.txt')
+	else:
+		sys.exit('Invalid Command')
+			
 	datafile = open("data.txt", "r+")
-	
-	# fo.write( "Python is a great language.\nYeah its great!!\n");
-	
+		
 	startProgram(datafile)
 	
 	datafile.close()
