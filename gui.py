@@ -11,10 +11,11 @@ root=Tk()
 f1 = Frame(root)
 f2 = Frame(root)
 
+#The frame of the system
 for frame in (f1, f2):
     frame.grid(row=0, column=0, sticky = "news")
 
-
+#asking for the UserName and Password
 username = Label(f1, text="Username:")
 password = Label(f1, text="Password:")
 entry1=Entry(f1)
